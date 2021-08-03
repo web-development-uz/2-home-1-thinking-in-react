@@ -1,0 +1,82 @@
+<html>
+<title>Thinking in React</title>
+<body>
+  <h1>Thinking in React</h1>
+  <p><i>React is, in our opinion, <b>the premier way</b> to build big, fast Web apps with JavaScript. It has scaled very well for us at <mark>Facebook and Instagram.</mark></i></p>
+  <p>One of the many great parts of React<sub>23</sub> is how it makes you think about apps as you build them. In this document, we’ll walk you through the thought process of building a searchable product data table using React.</p>
+  <hr/>
+  <a href="#bottom">Go to bottom</a>
+  <h3 id="#top">Step 1: Break The UI Into A Component Hierarchy</h3>
+  <p>You’ll see here that we have five components in our app. We’ve italicized the data each component represents.</p>
+  <ol>
+    <li>FilterableProductTable (orange): contains the entirety of the example</li>
+    <li>SearchBar (blue): receives all user input</li>
+    <li>ProductTable (green): displays and filters the data collection based on user input</li>
+    <li>ProductCategoryRow (turquoise): displays a heading for each category</li>
+    <li>ProductRow (red): displays a row for each product</li>
+ </ol>
+ <p>Now that we’ve identified the components in our mock, let’s arrange them into a hierarchy. Components that appear within another component in the mock should appear as a child in the hierarchy</p>
+ <ul>
+   <li>FilterableProductTable
+     <ul>
+        <li>SearchBar</li>
+        <li>ProductTable
+           <ul>
+             <li>ProductCategoryRow</li>
+	     <li>ProductRow</li>
+           </ul>
+        </li>
+     </ul>   
+   </li>
+ </ul>
+ <h3>Step 2: Identify The Minimal (but complete) Representation <abbr title="Official User Interface">Of UI State</abbr></h3>
+ <p>To make your UI interactive, you need to be able to trigger changes to your underlying data model. React <b><i>achieves this with state.</i></b></p>
+ <p>To build your app correctly, you first need to think of the minimal set of mutable state that your app needs. The key here is <mark>DRY: Don’t Repeat Yourself</mark>. Figure out the absolute <i>minimal representation</i> of the state your application needs and compute everything else you need on-demand. For example, if you’re building a TODO list, keep an array of the TODO items around; don’t keep a separate state variable for the count. Instead, when you want to render the TODO count, take the length of the TODO items array.</p>
+ <p>Think of all the pieces of data in our example application. We have:</p>
+ <ul>
+   <li>The original list of products</li>
+   <li>The search text the user has entered</li>
+   <li>The value of the checkbox</li>
+   <li>The filtered list of products</li>
+ </ul>
+ <p>Let’s go through each one and figure out which one is state. Ask three questions about each piece of data:<p>
+ <ol>
+   <li>Is it passed in <sup><i>from a parent via props</i></sup>? If so, it probably isn’t state.</li>
+   <li>Does it remain unchanged over time? If so, it probably isn’t state.</li>
+   <li>Can you compute it based on any other state or props in your component? If so, it isn’t state.</li>
+ </ol>
+ <p>The original list of products is passed in as props, so that’s not state. The search text and the checkbox seem to be state since they change over time and can’t be computed from anything. And finally, the filtered list of products isn’t state because it can be computed by combining the original list of products with the search text and value of the checkbox.</p>
+ <p><b><i>So finally, our state is:</i></b></p>
+  <dl>
+   <dt><i>USER INPUT</i></dt>
+   <dd>The search text the user has entered</dd>
+   <dt><i>USER CHECKBOX</i></dt>
+   <dd>The value of the checkbox</dd>
+  </dl>
+  <hr/>
+  <h3>Step 4: Identify Where Your State Should Live</h3>
+  <p>See the <mark>Pen Thinking</mark> In React<sup>666</sup>: Step 4 on <mark>CodePen</mark>.</p>
+  <p>OK, so we’ve <i>identified what the minimal</i> set of app state is. Next, we need to identify which component mutates, or owns, this state.</p>
+  <p>Remember: React is all about <b>one-way data flow down the component hierarchy. It may not be immediately clear which component should own</b> what state. This is often the most challenging part for newcomers to understand, so follow these steps to figure it out:</p>	
+  <dl>
+    <dt>Component</dt>
+    <dd>Identify every component that renders something based on that state.
+</dd>
+    <dd>Find a common owner component (a single component above all the components that need the state in the hierarchy).
+</dd>
+    <dd>Either the common owner or another component higher up in the hierarchy should own the state.
+</dd>
+    <dt>Render</dt>
+    <dd>If you can’t find a component where it makes sense to own the state, create a new component solely for holding the state and add it somewhere in the hierarchy above the common owner component.	
+</dd>
+    <dt>ProductTable</dt>
+    <dd>Needs to filter the product list based on state and SearchBar needs to display the search text and checked state.</p>
+  </dl>
+ <br/> 
+ <hr/>
+ <br/>
+ <h3 id="bottom">And That’s It</h3>
+ <p>Hopefully, this gives you an idea of how to think about building components and applications with React. While it may be a little more typing than you’re used to, remember that code is read far more than it’s written, and it’s less difficult to read this modular, explicit code. As you start to build large libraries of components, you’ll appreciate this explicitness and modularity, and with code reuse, your lines of code will start to shrink. :)</p>
+ <a href="#top">Go to top</a>
+</body>
+</html>
